@@ -56,7 +56,7 @@ fi
 
 if [[ -f /install/.nginx.lock ]]; then
     echo_progress_start "Setting up Emby nginx configuration"
-    bash /usr/local/bin/swizzin/nginx/emby.sh
+    bash /usr/bin/swizzin/nginx/emby.sh
     systemctl reload nginx
     echo_progress_done
 else

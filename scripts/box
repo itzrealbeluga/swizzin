@@ -43,7 +43,7 @@ function _function() {
 
 function _install() {
     installa=()
-    locks=($(find /usr/local/bin/swizzin/install -type f -printf "%f\n" | cut -d "." -f 1 | sort -d))
+    locks=($(find /usr/bin/swizzin/install -type f -printf "%f\n" | cut -d "." -f 1 | sort -d))
     for i in "${locks[@]}"; do
         app=${i}
         if [[ ! -f /install/.$app.lock ]]; then
@@ -55,7 +55,7 @@ function _install() {
     readarray -t result < results
     for result in "${result[@]}"; do
         echo_info "Installing ${result}"
-        bash "/usr/local/bin/swizzin/install/${result}.sh"
+        bash "/usr/bin/swizzin/install/${result}.sh"
     done
 
     rm results
@@ -64,7 +64,7 @@ function _install() {
 
 function _remove() {
     removea=()
-    locks=($(find /usr/local/bin/swizzin/remove -type f -printf "%f\n" | cut -d "." -f 1 | sort -d))
+    locks=($(find /usr/bin/swizzin/remove -type f -printf "%f\n" | cut -d "." -f 1 | sort -d))
     for i in "${locks[@]}"; do
         app=${i}
         if [[ -f /install/.$app.lock ]]; then
@@ -75,7 +75,7 @@ function _remove() {
     readarray -t result < results
     for result in "${result[@]}"; do
         echo_info -e "Removing ${result}"
-        bash /usr/local/bin/swizzin/remove/${result}.sh
+        bash /usr/bin/swizzin/remove/${result}.sh
     done
     rm results
     _function
@@ -84,7 +84,7 @@ function _remove() {
 function _cli() {
     arg=("$@")
     packages=("${arg[@]:1}")
-    repo=($(find /usr/local/bin/swizzin/install -type f -printf "%f\n" | cut -d "." -f 1))
+    repo=($(find /usr/bin/swizzin/install -type f -printf "%f\n" | cut -d "." -f 1))
     for app in "${packages[@]}"; do
         if [[ -f /install/.${app}.lock ]]; then
             echo_warn "Package $app already installed"
@@ -92,7 +92,7 @@ function _cli() {
             if [[ "${repo[*]}" =~ $app ]]; then
                 echo_info "Installing $app"
                 echo_docs "applications/$app"
-                bash /usr/local/bin/swizzin/install/$app.sh
+                bash /usr/bin/swizzin/install/$app.sh
             else
                 echo_warn "Package $app not found"
             fi
@@ -107,7 +107,7 @@ function _clr() {
         if [[ -f /install/.$app.lock ]]; then
             schedule_remove="true"
             echo_info "Removing $app"
-            bash /usr/local/bin/swizzin/remove/$app.sh
+            bash /usr/bin/swizzin/remove/$app.sh
             echo_success "$app removed"
         else
             echo_warn "Package $app not installed"
@@ -189,10 +189,10 @@ We URGE you to migrate to a supported release if/while you still have the chance
 function _upgrade() {
     arg=("$@")
     packages=("${arg[@]:1}")
-    repo=($(find /usr/local/bin/swizzin/upgrade -type f -printf "%f\n" | cut -d "." -f 1))
+    repo=($(find /usr/bin/swizzin/upgrade -type f -printf "%f\n" | cut -d "." -f 1))
     for app in "${packages[@]}"; do
         if [[ "${repo[*]}" =~ $app ]]; then
-            bash /usr/local/bin/swizzin/upgrade/"$app".sh || exit 1
+            bash /usr/bin/swizzin/upgrade/"$app".sh || exit 1
         else
             echo_warn "Upgrade script for $app does not exist"
         fi
@@ -243,7 +243,7 @@ function _help() {
 }
 
 function _list() {
-    repo=($(find /usr/local/bin/swizzin/install -type f -printf "%f\n" | cut -d. -f 1 | sort -d))
+    repo=($(find /usr/bin/swizzin/install -type f -printf "%f\n" | cut -d. -f 1 | sort -d))
     locale=/etc/swizzin/sources/lang_en
     for app in "${repo[@]}"; do
         sgformat="${bold}%-15s${normal}"
@@ -313,20 +313,20 @@ function _adduser() {
         if [[ -f /install/.${app}.lock ]]; then
             case $app in
                 autodl)
-                    /usr/local/bin/swizzin/install/${app}.sh "${user}"
+                    /usr/bin/swizzin/install/${app}.sh "${user}"
                     ;;
                 deluge)
-                    /usr/local/bin/swizzin/install/${app}.sh "${user}"
+                    /usr/bin/swizzin/install/${app}.sh "${user}"
                     app="{deluged,deluge-web}"
                     eval systemctl enable -q ${app}@"${user}"
                     eval systemctl start ${app}@"${user}"
                     ;;
                 rutorrent)
                     if [[ ! -f /install/.rutorrent.lock ]]; then touch /install/.rutorrent.lock; fi
-                    /usr/local/bin/swizzin/install/${app}.sh
+                    /usr/bin/swizzin/install/${app}.sh
                     ;;
                 *)
-                    /usr/local/bin/swizzin/install/${app}.sh "${user}"
+                    /usr/bin/swizzin/install/${app}.sh "${user}"
                     systemctl enable -q ${app}@"${user}"
                     systemctl start ${app}@"${user}"
                     ;;
@@ -346,7 +346,7 @@ function _adduser() {
         echo "$user:$pass" > /root/.master.info
     elif [[ -z $SETUP_USER ]]; then # Only for non-master users, therefore only if this is not coming from setup.sh
         cat > /etc/sudoers.d/"${user}" << SUD
-Cmnd_Alias   ${USER}CMDS = /bin/systemctl stop flood@${user}, /bin/systemctl restart flood@${user}, /bin/systemctl start flood@${user}, /bin/systemctl start rtorrent@${user}, /bin/systemctl stop rtorrent@${user}, /bin/systemctl restart rtorrent@${user}, /bin/systemctl start deluged@${user}, /bin/systemctl stop deluged@${user}, /bin/systemctl restart deluged@${user}, /bin/systemctl start deluge-web@${user}, /bin/systemctl stop deluge-web@${user}, /bin/systemctl restart deluge-web@${user}, /bin/systemctl start irssi@${user}, /bin/systemctl stop irssi@${user}, /bin/systemctl restart irssi@${user}, /bin/systemctl start qbittorrent@${user}, /bin/systemctl stop qbittorrent@${user}, /bin/systemctl restart qbittorrent@${user}, /usr/local/bin/swizzin/box chpasswd ${user}
+Cmnd_Alias   ${USER}CMDS = /bin/systemctl stop flood@${user}, /bin/systemctl restart flood@${user}, /bin/systemctl start flood@${user}, /bin/systemctl start rtorrent@${user}, /bin/systemctl stop rtorrent@${user}, /bin/systemctl restart rtorrent@${user}, /bin/systemctl start deluged@${user}, /bin/systemctl stop deluged@${user}, /bin/systemctl restart deluged@${user}, /bin/systemctl start deluge-web@${user}, /bin/systemctl stop deluge-web@${user}, /bin/systemctl restart deluge-web@${user}, /bin/systemctl start irssi@${user}, /bin/systemctl stop irssi@${user}, /bin/systemctl restart irssi@${user}, /bin/systemctl start qbittorrent@${user}, /bin/systemctl stop qbittorrent@${user}, /bin/systemctl restart qbittorrent@${user}, /usr/bin/swizzin/box chpasswd ${user}
 
 ${user}     ALL = (ALL) NOPASSWD: ${USER}CMDS
 SUD
@@ -470,7 +470,7 @@ function _chpasswd() {
                     elif $(command -v python3 > /dev/null 2>&1); then
                         pythonversion=python3
                     fi
-                    DWP=$(${pythonversion} /usr/local/bin/swizzin/deluge.Userpass.py ${pass} ${DWSALT})
+                    DWP=$(${pythonversion} /usr/bin/swizzin/deluge.Userpass.py ${pass} ${DWSALT})
                     sed -i "s/.*${user}.*/${user}:${pass}:10/" /home/$user/.config/deluge/auth
                     sed -i "s/.*pwd_salt.*/  \"pwd_salt\": \"${DWSALT}\",/" /home/$user/.config/deluge/web.conf
                     sed -i "s/.*pwd_sha1.*/  \"pwd_sha1\": \"${DWP}\",/" /home/$user/.config/deluge/web.conf
@@ -643,7 +643,7 @@ case "$1" in
         exit 0
         ;;
     "rtx")
-        /usr/local/bin/swizzin/rtx
+        /usr/bin/swizzin/rtx
         exit 0
         ;;
     "update")

@@ -88,7 +88,7 @@ _nginx_radarr() {
         echo_progress_start "Installing nginx configuration"
         #TODO what is this sleep here for? See if this can be fixed by doing a check for whatever it needs to
         sleep 10
-        bash /usr/local/bin/swizzin/nginx/radarr.sh
+        bash /usr/bin/swizzin/nginx/radarr.sh
         systemctl -q reload nginx
         echo_progress_done "Nginx configured"
     else

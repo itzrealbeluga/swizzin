@@ -134,7 +134,7 @@ chown jellyfin:adm /etc/jellyfin
 #
 # Configure the nginx proxypass using positional parameters.
 if [[ -f /install/.nginx.lock ]]; then
-    bash /usr/local/bin/swizzin/nginx/jellyfin.sh
+    bash /usr/bin/swizzin/nginx/jellyfin.sh
     systemctl -q restart nginx.service
 else
     echo_info "Jellyfin will run on port 8920"

@@ -34,7 +34,7 @@ function _installRapidleech1() {
 function _installRapidleech3() {
     # Checking for nginx is the first thing the script does
     echo_progress_start "Configuring nginx"
-    bash /usr/local/bin/swizzin/nginx/rapidleech.sh
+    bash /usr/bin/swizzin/nginx/rapidleech.sh
     systemctl reload nginx
     echo_progress_done
 }

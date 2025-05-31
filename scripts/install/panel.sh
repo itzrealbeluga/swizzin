@@ -14,7 +14,7 @@
 if [[ ! -f /install/.nginx.lock ]]; then
     echo_warn "This package requires nginx to be installed!"
     if ask "Install nginx?" Y; then
-        bash /usr/local/bin/swizzin/install/nginx.sh
+        bash /usr/bin/swizzin/install/nginx.sh
     else
         exit 1
     fi
@@ -81,7 +81,7 @@ echo_progress_done
 
 # Checking nginx existence is the first thing that happens in the script
 echo_progress_start "Configuring nginx"
-bash /usr/local/bin/swizzin/nginx/panel.sh
+bash /usr/bin/swizzin/nginx/panel.sh
 systemctl reload nginx
 echo_progress_done
 

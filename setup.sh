@@ -45,11 +45,11 @@ function _source_setup() {
         echo "Best of luck and please follow the contribution guidelines cheerio"
     else
         echo -e "...\tCloning swizzin repo to localhost"
-        git clone https://github.com/swizzin/swizzin.git /etc/swizzin >> ${log} 2>&1
+        git clone https://github.com/itzrealbeluga/swizzin.git /etc/swizzin >> ${log} 2>&1
         echo -e "\tSwizzin cloned!"
     fi
 
-    ln -s /etc/swizzin/scripts/ /usr/local/bin/swizzin
+    ln -s /etc/swizzin/scripts/ /usr/bin/swizzin
     #shellcheck source=sources/globals.sh
     . /etc/swizzin/sources/globals.sh
 
@@ -275,7 +275,7 @@ function _choices() {
         touch /tmp/.$result.lock
     done < "$results"
 
-    locksextra=($(find /usr/local/bin/swizzin/install -type f -printf "%f\n" | cut -d "." -f 1 | sort -d))
+    locksextra=($(find /usr/bin/swizzin/install -type f -printf "%f\n" | cut -d "." -f 1 | sort -d))
     for i in "${locksextra[@]}"; do
         app=${i}
         if [[ ! -f /tmp/.$app.lock ]]; then
@@ -354,12 +354,12 @@ function _post() {
     user=$(_get_master_username)
 
     ip=$(ip route get 1 | sed -n 's/^.*src \([0-9.]*\) .*$/\1/p')
-    if ! grep -q -ow '^export PATH=$PATH:/usr/local/bin/swizzin$' ~/.bashrc; then
-        echo "export PATH=\$PATH:/usr/local/bin/swizzin" >> /root/.bashrc
+    if ! grep -q -ow '^export PATH=$PATH:/usr/bin/swizzin$' ~/.bashrc; then
+        echo "export PATH=\$PATH:/usr/bin/swizzin" >> /root/.bashrc
     fi
-    #echo "export PATH=\$PATH:/usr/local/bin/swizzin" >> /home/$user/.bashrc
+    #echo "export PATH=\$PATH:/usr/bin/swizzin" >> /home/$user/.bashrc
     #chown ${user}: /home/$user/.profile
-    echo "Defaults    secure_path = /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/bin/swizzin" > /etc/sudoers.d/secure_path
+    echo "Defaults    secure_path = /usr/local/sbin:/usr/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/bin/swizzin" > /etc/sudoers.d/secure_path
     if [[ $distribution = "Ubuntu" ]]; then
         echo 'Defaults  env_keep -="HOME"' > /etc/sudoers.d/env_keep
     fi

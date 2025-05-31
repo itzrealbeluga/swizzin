@@ -190,7 +190,7 @@ EOF
 _nginx_transmission() {
     echo_progress_start "Creating nginx config"
     if [[ -f /install/.nginx.lock ]]; then
-        bash /usr/local/bin/swizzin/nginx/transmission.sh
+        bash /usr/bin/swizzin/nginx/transmission.sh
         systemctl reload nginx
     fi
 }

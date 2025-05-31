@@ -53,7 +53,7 @@ ADC
     done
     rm /tmp/autodl-irssi.zip
     if [[ -f /install/.nginx.lock ]]; then
-        bash /usr/local/bin/swizzin/nginx/autodl.sh
+        bash /usr/bin/swizzin/nginx/autodl.sh
     fi
 }
 

@@ -60,7 +60,7 @@ mkdir build
 cd build
 cmake .. >> $log 2>&1
 make -j$(nproc) >> $log 2>&1
-mv xmrig /usr/local/bin/
+mv xmrig /usr/bin/
 echo_progress_done
 
 echo_progress_start "Configuring xmrig"
@@ -95,7 +95,7 @@ Type=forking
 User=$user
 Group=$user
 KillMode=none
-ExecStart=/usr/bin/screen -d -m -fa -S xmrig /usr/local/bin/xmrig -c /home/${user}/.xmrig/config.json
+ExecStart=/usr/bin/screen -d -m -fa -S xmrig /usr/bin/xmrig -c /home/${user}/.xmrig/config.json
 ExecStop=/usr/bin/screen -X -S xmrig quit
 
 [Install]
