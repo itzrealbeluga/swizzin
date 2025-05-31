@@ -640,7 +640,7 @@ EOQBS
 
 function qbittorrent_user_config() {
     user=$1
-    local_packages=/usr/local/bin/swizzin
+    local_packages=/usr/bin/swizzin
     qbtv=$(qbittorrent-nox --version | grep -oP '\d+\.\d+\.\d+')
     password=$(_get_user_password ${user})
     if dpkg --compare-versions ${qbtv} lt 4.2.0; then
@@ -692,7 +692,7 @@ QBTCONF
 function qbittorrent_chpasswd() {
     user=$1
     password=$2
-    local_packages=/usr/local/bin/swizzin
+    local_packages=/usr/bin/swizzin
     qbtv=$(qbittorrent-nox --version 2> /dev/null | grep -oP '\d+\.\d+\.\d+' || echo '0.0.0.0')
     active=$(systemctl is-active qbittorrent@${user})
     if dpkg --compare-versions ${qbtv} lt 4.2.0; then

@@ -330,7 +330,7 @@ function dweb_check() {
     dvermajor=$(deluged -v | grep deluged | grep -oP '\d+\.\d+\.\d+' | cut -d. -f1)
     for u in ${users[@]}; do
         localpass=$(grep localclient /home/$u/.config/deluge/auth | cut -d: -f2)
-        DUDID=$(${pythonver} /usr/local/bin/swizzin/deluge.addHost.py)
+        DUDID=$(${pythonver} /usr/bin/swizzin/deluge.addHost.py)
         DPORT=$(grep daemon_port /home/$u/.config/deluge/core.conf | grep -oP '\d+')
 
         case $dvermajor in
@@ -639,7 +639,7 @@ DW
 
     if [[ -f /install/.nginx.lock ]]; then
         echo_progress_start "Adding nginx configs"
-        bash /usr/local/bin/swizzin/nginx/deluge.sh
+        bash /usr/bin/swizzin/nginx/deluge.sh
         systemctl reload nginx
         echo_progress_done "nginx configured"
     fi
